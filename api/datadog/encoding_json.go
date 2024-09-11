@@ -9,20 +9,24 @@ package datadog
 import (
 	"encoding/json"
 	"io"
+
+	"github.com/bytedance/sonic"
 )
 
 func Marshal(v interface{}) ([]byte, error) {
-	return json.Marshal(v)
+	return sonic.Marshal(v)
 }
 
 func Unmarshal(data []byte, v interface{}) error {
-	return json.Unmarshal(data, v)
+	return sonic.Unmarshal(data, v)
 }
 
 func NewEncoder(w io.Writer) *json.Encoder {
-	return json.NewEncoder(w)
+	enc := sonic.ConfigDefault.NewEncoder(w)
+	return enc.(*json.Encoder)
 }
 
 func NewDecoder(r io.Reader) *json.Decoder {
-	return json.NewDecoder(r)
+	dec := sonic.ConfigDefault.NewDecoder(r)
+	return dec.(*json.Decoder)
 }
